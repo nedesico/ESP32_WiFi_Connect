@@ -1,6 +1,6 @@
 {
   "name": "ESP32_WiFi_Connect",
-  "keywords": "wifi, connect, dns, esp32, access point",
+  "keywords": "wifi, connect, dns, esp32, access point, easyesp",
   "description": "Automatically establish a WiFi AP with GUI, that allows you to configure your ESP32 with your local WiFi credentials. Your ESP32 will automatically launch a dedicated WiFi Access Point DNS Server, with User Interface, when WiFi isn't configured yet or unavailable. This will allow you to configure and save the WiFi credentials to the onboard flash and connect to the WiFi when in range.",
   "repository": {
     "type": "git",
