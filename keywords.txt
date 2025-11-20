@@ -1,0 +1,17 @@
+#######################################
+# Syntax Coloring Map thermistor
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+EasyESP	KEYWORD1
+WIFI	KEYWORD1
+AP	KEYWORD1
+DNS	KEYWORD1
+ACCESS	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+isConnected	KEYWORD2
