@@ -71,5 +71,5 @@ class ESP32_WiFi_Connect {
 
 };
 
-
+// https://downloads.arduino.cc/libraries/logs/github.com/nedesico/ESP32_WiFi_Connect/
 #endif
