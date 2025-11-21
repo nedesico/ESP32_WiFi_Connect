@@ -14,7 +14,7 @@ void setup() {
 
   espwifi.begin();
 
-  Serial.println(espwifi.getStatus()); // optional debugging info. returns wifi_not_configured / wifi_connection_failed / wifi_connected
+  Serial.println(espwifi.getStatus()); // optional debugging info. returns String wifi_not_configured / wifi_connection_failed / wifi_connected
 }
 
 void loop() {}
@@ -61,9 +61,19 @@ void loop() {}
 ```
 #include <ESP32_WiFi_Connect.h>
 ESP32_WiFi_Connect espwifi;
+#define LED1 2 // Green LED = WiFi configured and connected
+#define LED2 3 // Blue LED = WiFi configured but not conneced
+#define LED3 4 // Red LED = WiFi not configured
 
 void setup() {
   Serial.begin(115200);
+
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  digitalWrite(LED3, LOW);
 
   espwifi.debug(true); // Enable ESP32_WiFi_Connect Serial debugging
   // espwifi.setCustomAP("MyCustomAPName"); // Insecure Custom Access Point SSID, without password (insecure open network)
@@ -86,7 +96,21 @@ void setup() {
   espwifi.setDashboard("/status"); // Make the Status page your dashboard page (Optional. Your device will default to /wifi if setDashboard("/someurl") isn't set anywhere)
 }
 
-void loop() {}
+void loop() {
+  // Light up an LED to show the device status. Putting it in the loop provides a continual visual indicator of whether the device has an active WiFi connection.
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  digitalWrite(LED3, LOW);
+  if(espwifi.getStatus()=='wifi_connected') {
+    digitalWrite(LED1, HIGH); // Green LED shows thet the device has an active WiFi connection
+  } else if(espwifi.getStatus()=='wifi_connection_failed') {
+    digitalWrite(LED2, HIGH); // Blue LED shows that the WiFi is configured, but is either not connecting or is misconfigured or is out of WiFi range
+  } else if(espwifi.getStatus()=='wifi_not_configured') {
+    digitalWrite(LED3, HIGH); // Red LED shows that the device has not been configured
+  }
+
+  delay(2000); // Check the device connection status every 2 seconds
+}
 ```
 
 # Usage:
