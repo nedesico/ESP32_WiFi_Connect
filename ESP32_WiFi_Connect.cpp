@@ -555,8 +555,9 @@ void ESP32_WiFi_Connect::_startAP() {
 
     String newNetworkHash = _computeMD5(String(data.ssid) + String(_apSSID) + String(data.pass));
     _debugInfoln("Settings saved: " + _computeMD5(oldNetworkHash) + "!=" + String(newNetworkHash));
-    request->send(200, "text/html", "WiFi network saved");
-    _retry = true;
+    request->send(200, "text/html", "WiFi network saved. Restarting...");
+    delay(5000);
+    ESP.restart();
   });
 
   esp32Server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -620,7 +621,11 @@ void ESP32_WiFi_Connect::_startAP() {
 }
 
 String ESP32_WiFi_Connect::_addMenu(String html) {
-    if(_menuItems.size()==0) return html;
+    if(_menuItems.size()==0) {
+      String emptyMenu = "<!-- no menu -->";
+      html.replace("%MENU%", emptyMenu);
+      return html;
+    }
     String menuHtml = "<div class=\"menu\">";
     for(size_t i = 0; i < _menuItems.size(); i++) {
         menuHtml += "<span class=\"menu-item\">";
@@ -744,7 +749,10 @@ void ESP32_WiFi_Connect::_debugInfo(String str) {
   }
 }
 
-void ESP32_WiFi_Connect::setCustomAP(const char* ssid, const char* pass) {
+void ESP32_WiFi_Connect::setCustomAP(String ssidS, String passS) {
+    const char* ssid = ssidS.c_str();
+    const char* pass = passS.c_str();
+
     if(ssid && ssid[0]) {
         strncpy(_apSSID, ssid, sizeof(_apSSID) - 1);
         _apSSID[sizeof(_apSSID) - 1] = '\0';

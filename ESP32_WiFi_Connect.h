@@ -24,7 +24,7 @@ class ESP32_WiFi_Connect {
     bool        isConfigured();
     bool        isFailed();
     void        setCustomAPhtml(char* html);
-    void        setCustomAP(const char* ssid, const char* pass);
+    void        setCustomAP(String ssid, String pass);
     void        setDashboard(String dashboard);
     void        setWifiTimeout(uint32_t timeout_ms);
     void        debug(bool debug);
@@ -48,7 +48,7 @@ class ESP32_WiFi_Connect {
     bool        _configured = false;
     bool        _failed = true;
     bool        _retry = true;
-    char        _esp32_wifi_connect_ap_html;
+    char*        _esp32_wifi_connect_ap_html;
     bool        _debug = false;
     void        _setSSID(const char* s); 
     void        _setPASS(const char* p); 

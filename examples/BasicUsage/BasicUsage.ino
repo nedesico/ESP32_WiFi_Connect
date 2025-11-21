@@ -1,12 +1,13 @@
 #include <ESP32_WiFi_Connect.h>
 
 ESP32_WiFi_Connect espwifi;
+
 void setup() {
   Serial.begin(115200);
+
   espwifi.begin();
-  Serial.println(espwifi.getStatus());
+
+  Serial.println(espwifi.getStatus()); // optional debugging info
 }
 
-void loop() {
-  espwifi.keepAlive();
-}
+void loop() {}
