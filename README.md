@@ -46,7 +46,7 @@ ESP32_WiFi_Connect espwifi;
 void setup() {
   Serial.begin(115200);
 
-  espwifi.debug(true); // Enable ESP32_WiFi_Connect Serial debugging
+  espwifi.debug(true); // Enable ESP32_WiFi_Connect Serial debugging (optional)
   espwifi.setCustomAP("MyCustomAPName"); // Insecure Custom Access Point SSID, without password (insecure open network)
   //espwifi.setCustomAP("MyCustomAPName", "S3curePa55"); // Custom Access Point SSID, secured with password
   espwifi.begin();
@@ -75,7 +75,7 @@ void setup() {
   digitalWrite(LED2, LOW);
   digitalWrite(LED3, LOW);
 
-  espwifi.debug(true); // Enable ESP32_WiFi_Connect Serial debugging
+  espwifi.debug(true); // Enable ESP32_WiFi_Connect Serial debugging (optional)
   // espwifi.setCustomAP("MyCustomAPName"); // Insecure Custom Access Point SSID, without password (insecure open network)
   espwifi.setCustomAP("MyCustomAPName", "S3curePa55"); // Custom Access Point SSID, secured with password
   espwifi.begin();
