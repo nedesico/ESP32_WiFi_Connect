@@ -390,6 +390,7 @@ void ESP32_WiFi_Connect::debug(bool e) { _debug = e; if(e) Serial.println("ESP32
 void ESP32_WiFi_Connect::keepAlive() { esp32DnsServer.processNextRequest(); }
 void ESP32_WiFi_Connect::setWifiTimeout(uint32_t t) { _timeout_ms = t; }
 void ESP32_WiFi_Connect::onGet(const String& p, RouteHandler h) { esp32Server.on(p.c_str(), HTTP_GET, h); }
+void ESP32_WiFi_Connect::onPost(const String& p, RouteHandler h) { esp32Server.on(p.c_str(), HTTP_POST, h); }
 
 void ESP32_WiFi_Connect::_setEasySSID() {
   String chipId = String((uint32_t)(ESP.getEfuseMac() >> 24), HEX); chipId.toUpperCase();

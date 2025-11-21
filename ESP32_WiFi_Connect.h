@@ -37,6 +37,7 @@ public:
   void setWifiTimeout(uint32_t timeout_ms);
   using RouteHandler = std::function<void(AsyncWebServerRequest*)>;
   void onGet(const String& path, RouteHandler handler);
+  void onPost(const String& path, RouteHandler handler);
   void sendHtmlPage(AsyncWebServerRequest* request, const String& content = "", const String& header = "", const String& footer = "");
   bool isConnected()   { return _connection; }
   bool isConfigured()  { return _configured; }
