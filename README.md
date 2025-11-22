@@ -139,7 +139,7 @@ Once on the AP Config Web Page, select or enter your WiFi SSID and Password, the
 
 
 
-Your AP SSID will also show up your WiFi Router with an IP, when connected. When connected to the same WiFi, you can still access the AP via the original APHostname.local url, or via the IP:
+Your AP SSID will also show up in your WiFi Router with it's IP, when connected. You can access the web host via the original APHostname.local url or the IP, when your phone or computer is connected to the same WiFi network:
 <img src="https://raw.githubusercontent.com/nedesico/ESP32_WiFi_Connect/refs/heads/main/custom_ap_hostname_on_wifi_router_with_ip.png">
 
 
