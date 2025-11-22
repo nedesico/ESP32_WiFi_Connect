@@ -5,16 +5,16 @@ ESP32 WiFi Connect UI. Your ESP32 will automatically launch a dedicated WiFi Acc
 # Very basic usage:
 
 ```
-#include <ESP32_WiFi_Connect.h>
+#include <ESP32_WiFi_Connect.h> // Include the ESP32_WiFi_Connect library
 
-ESP32_WiFi_Connect espwifi;
+ESP32_WiFi_Connect espwifi; // Instantiate the class
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200); // Enable Serial monitoring (optional)
 
-  espwifi.begin();
+  espwifi.begin(); // Run the AP and web host
 
-  Serial.println(espwifi.getStatus()); // optional debugging info. returns String wifi_not_configured / wifi_connection_failed / wifi_connected
+  Serial.println(espwifi.getStatus()); // optional WiFi status debugging info from ESP32_WiFi_Connect. Returns (String) wifi_not_configured / wifi_connection_failed / wifi_connected
 }
 
 void loop() {}
@@ -61,6 +61,7 @@ void loop() {}
 ```
 #include <ESP32_WiFi_Connect.h>
 ESP32_WiFi_Connect espwifi;
+
 #define LED1 2 // Green LED = WiFi configured and connected
 #define LED2 3 // Blue LED = WiFi configured but not conneced
 #define LED3 4 // Red LED = WiFi not configured
