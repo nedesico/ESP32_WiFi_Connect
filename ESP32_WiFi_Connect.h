@@ -30,6 +30,7 @@ public:
   void pageTitle(const String& html);
   void pageTitle(const char* html);
   void setCustomAP(const String& ssid, const String& pass = "");
+  void setDefaultWiFi(const String& ssid, const String& pass = "");
   void setDashboard(const String& dashboard);
   void addToMenu(const String& title, const String& url);
   void debug(bool enable = false);
@@ -38,6 +39,7 @@ public:
   using RouteHandler = std::function<void(AsyncWebServerRequest*)>;
   void onGet(const String& path, RouteHandler handler);
   void onPost(const String& path, RouteHandler handler);
+  void sendHtml(AsyncWebServerRequest* request, const String& html = "", const int code = 200);
   void sendHtmlPage(AsyncWebServerRequest* request, const String& content = "", const String& header = "", const String& footer = "");
   bool isConnected()   { return _connection; }
   bool isConfigured()  { return _configured; }
@@ -64,6 +66,8 @@ private:
   String _pageTitle;
   char _apSSID[33] = {};
   char _apPASS[65] = {};
+  char _defaultDataSSID[64] = {};
+  char _defaultDataPASS[64] = {};
   bool _apCustom = false;
   String _dashboard = "/wifi";
   std::vector<MenuItem> _menuItems;

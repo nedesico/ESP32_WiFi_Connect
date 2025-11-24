@@ -243,6 +243,12 @@ String ESP32_WiFi_Connect::_getEffectiveHeader(const String& o) const  { return 
 String ESP32_WiFi_Connect::_getEffectiveContent(const String& o) const { return o.length() ? o : (_customContent.length() ? _customContent : FPSTR(default_content)); }
 String ESP32_WiFi_Connect::_getEffectiveFooter(const String& o) const  { return o.length() ? o : (_customFooter.length() ? _customFooter : FPSTR(default_footer)); }
 
+void ESP32_WiFi_Connect::sendHtml(AsyncWebServerRequest* request,
+                                      const String& html,
+                                      const int code) {
+  request->send(code, "text/html", html);
+}
+
 void ESP32_WiFi_Connect::sendHtmlPage(AsyncWebServerRequest* request,
                                       const String& content,
                                       const String& header,
@@ -384,6 +390,11 @@ void ESP32_WiFi_Connect::setCustomAP(const String& s, const String& p) {
   _apCustom = true;
 }
 
+void ESP32_WiFi_Connect::setDefaultWiFi(const String& s, const String& p) {
+  strncpy(_defaultDataSSID, s.c_str(), 64); _defaultDataSSID[64] = '\0';
+  strncpy(_defaultDataPASS, p.c_str(), 64); _defaultDataPASS[64] = '\0';
+}
+
 void ESP32_WiFi_Connect::setDashboard(const String& d) { _dashboard = d.startsWith("/") ? d : "/" + d; }
 void ESP32_WiFi_Connect::addToMenu(const String& t, const String& u) { _menuItems.push_back({t, u}); }
 void ESP32_WiFi_Connect::debug(bool e) { _debug = e; if(e) Serial.println("ESP32_WiFi_Connect degugging enabled"); }
@@ -407,6 +418,13 @@ void ESP32_WiFi_Connect::_loadFromNVS() {
     _debugInfoln("data.pass: " + String(data.pass));
   } else {
     data = Parameters();
+    if(String(_defaultDataSSID)) {
+      strncpy(data.ssid, _defaultDataSSID, 64);
+      strncpy(data.pass, _defaultDataPASS, 64);
+      _debugInfoln("No data.ssid found");
+      _debugInfoln("_defaultDataSSID found in sketch: " + String(data.pass));
+      _debugInfoln("Saving _defaultDataSSID to data.ssid");
+    }
     _saveToNVS();
   }
   prefs.end();
