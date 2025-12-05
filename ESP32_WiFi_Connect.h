@@ -39,6 +39,9 @@ public:
   using RouteHandler = std::function<void(AsyncWebServerRequest*)>;
   void onGet(const String& path, RouteHandler handler);
   void onPost(const String& path, RouteHandler handler);
+
+  AsyncWebServer& server();
+
   void sendHtml(AsyncWebServerRequest* request, const String& html = "", const int code = 200);
   void sendHtmlPage(AsyncWebServerRequest* request, const String& content = "", const String& header = "", const String& footer = "");
   bool isConnected()   { return _connection; }

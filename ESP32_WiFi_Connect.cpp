@@ -22,7 +22,7 @@ const char default_header[] PROGMEM = R"==hc==(
       p { color: #aaaaaa; }
       a, a:hover { text-decoration: none; }
       .wrapper { display: grid; grid-template-columns: 50% 50%; align-items: center; }
-      #footer { padding: 20px 0; }
+      #footer { padding: 20px 0; margin: 80px 0 0 0; }
       .menu { display: block; padding: 0 0 2px; margin: 0 0 40px; border-bottom: 1px solid #aaa; }
       span.menu-item { display: inline-block; padding: 5px 10px; min-width: 60px; text-align: center; border-left: 1px solid #aaa; }
       .menu span.menu-item:first-child { border-left: none; }
@@ -58,7 +58,7 @@ const char default_content[] PROGMEM = R"=====(
       </div>
     </form>
     <div class="input-field clearfix">
-      <button class="button" onclick="saveWiFiData();">Save Config</button> <span style="display: inline-block; float: right;"><a href="/status">Device Status</a></span>
+      <button class="button" onclick="saveWiFiData();">Save Config</button>
     </div>
     <div id="save-message"></div>
     <br><br>
@@ -88,25 +88,16 @@ const char default_content[] PROGMEM = R"=====(
 
       function saveWiFiData() {
           const form = document.getElementById("wifi-setup");
+          const msgDiv = document.getElementById("save-message");
           const formData = new FormData(form);
           const xhr = new XMLHttpRequest();
           xhr.open("POST", "/updatewifi?action=1", true);
           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          xhr.onreadystatechange = function() {
-              if(xhr.readyState === XMLHttpRequest.DONE) {
-                  const msgDiv = document.getElementById("save-message");
-                  msgDiv.innerHTML = "<p>" + xhr.responseText + "</p>";
-                  setTimeout(() => msgDiv.innerHTML = "", 10000);
-              }
-          };
+          setTimeout(function() {
+            msgDiv.innerHTML = '<p>Settings saved. Reloading...</p>';
+            window.location = window.location;
+          }, 5000);
           xhr.send(new URLSearchParams(formData));
-      }
-
-      function factoryReset() {
-          if(!confirm("Are you sure you want to reset to factory settings?")) return;
-          var xhr = new XMLHttpRequest();
-          xhr.open("GET", "/factoryreset", true);
-          xhr.send();
       }
 
       function showLoading() {
@@ -206,6 +197,17 @@ const char default_footer[] PROGMEM = R"==fc==(
       </div>
     </div>
   </div>
+    <script>
+      function factoryReset() {
+          if(!confirm("Are you sure you want to reset to factory settings?")) return;
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "/factoryreset", true);
+          xhr.send();
+          setTimeout(function(){
+            window.location = window.location;
+          }, 10000);
+      }
+    </script>
   </body>
 </html>
 )==fc==";
@@ -342,7 +344,7 @@ void ESP32_WiFi_Connect::_startAP() {
   esp32Server.begin();
 
   esp32Server.on("/", HTTP_GET, [this](AsyncWebServerRequest* r) { r->redirect(_dashboard); });
-  esp32Server.on("/wifi", HTTP_GET, [this](AsyncWebServerRequest* r) { pageTitle("WiFi Connect"); sendHtmlPage(r); });
+  esp32Server.on("/wifi", HTTP_GET, [this](AsyncWebServerRequest* r) { pageTitle("WiFi Config"); sendHtmlPage(r); });
 
   esp32Server.on("/updatewifi", HTTP_POST, [this](AsyncWebServerRequest* r) {
     for (int i = 0; i < r->args(); i++) {
@@ -402,6 +404,10 @@ void ESP32_WiFi_Connect::keepAlive() { esp32DnsServer.processNextRequest(); }
 void ESP32_WiFi_Connect::setWifiTimeout(uint32_t t) { _timeout_ms = t; }
 void ESP32_WiFi_Connect::onGet(const String& p, RouteHandler h) { esp32Server.on(p.c_str(), HTTP_GET, h); }
 void ESP32_WiFi_Connect::onPost(const String& p, RouteHandler h) { esp32Server.on(p.c_str(), HTTP_POST, h); }
+
+AsyncWebServer& ESP32_WiFi_Connect::server() {
+  return esp32Server;
+}
 
 void ESP32_WiFi_Connect::_setEasySSID() {
   String chipId = String((uint32_t)(ESP.getEfuseMac() >> 24), HEX); chipId.toUpperCase();
